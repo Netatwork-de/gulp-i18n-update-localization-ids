@@ -1,11 +1,11 @@
 'use strict';
 
 const gulp = require('gulp');
-const i18nTagger = require('.');
+const i18nUpdateUID = require('.');
 
 exports.default = function() {
     return gulp.src('./dev/in/**.html')
-        .pipe(i18nTagger({
+        .pipe(i18nUpdateUID({
             whitelist: [
                 {tagName: 'h1', attrs: ['foo']},
                 {tagName: 'p', content: 'html'},

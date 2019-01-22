@@ -1,7 +1,7 @@
 {
-  "name": "gulp-i18n-tagger",
+  "name": "gulp-i18n-update-uid",
   "version": "0.1.0",
-  "description": "",
+  "description": "Update i18n uids in html files.",
   "main": "index.js",
   "scripts": {
     "start": "gulp"
