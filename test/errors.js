@@ -14,3 +14,9 @@ test('non-whitelisted tag is already localized', transformFailsTest({
 }, `
     <h1 t="foo"></h1>
 `, /tag (has.*attribute)|(is.*localized)/i));
+
+test('mixed content', transformFailsTest({
+    whitelist: [{tagName: 'h1'}]
+}, `
+    <h1>foo<div></div></h1>
+`, /text and non-text/));
