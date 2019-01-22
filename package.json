@@ -4,20 +4,30 @@
   "description": "Update i18n uids in html files.",
   "main": "index.js",
   "scripts": {
-    "start": "gulp"
+    "start": "gulp",
+    "test": "nyc -- ava --verbose",
+    "watch": "ava --watch --verbose",
+    "prepack": "npm test"
   },
   "devDependencies": {
-    "gulp": "^4.0.0"
+    "ava": "^1.1.0",
+    "gulp": "^4.0.0",
+    "nyc": "^13.1.0"
   },
   "peerDependencies": {
     "gulp": "^4.0.0",
     "vinyl": "^2.0.0"
   },
-  "author": "Net at Work GmbH",
-  "license": "Apache-2.0",
   "dependencies": {
     "parse5": "^5.1.0",
     "plugin-error": "^1.0.1",
     "through2": "^3.0.0"
-  }
+  },
+  "ava": {
+    "files": [
+      "test/*.js"
+    ]
+  },
+  "author": "Net at Work GmbH",
+  "license": "Apache-2.0"
 }
