@@ -1,4 +1,7 @@
 # gulp-i18n-update-uid
+[![Build Status](https://travis-ci.com/Netatwork-de/gulp-i18n-update-uid.svg?branch=master)](https://travis-ci.com/Netatwork-de/gulp-i18n-update-uid)
+[![Npm Version](https://img.shields.io/npm/v/ulp-i18n-update-uid.svg) ![Npm License](https://img.shields.io/npm/l/ulp-i18n-update-uid.svg)](https://npmjs.org/package/gulp-i18n-update-uid)
+
 Gulp task for updating i18n uids in html files.
 ```bash
 npm i -D gulp-i18n-update-uid
