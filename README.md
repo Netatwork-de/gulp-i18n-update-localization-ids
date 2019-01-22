@@ -57,7 +57,7 @@ idTemplate: x => `foo-${x}`
 Optional. Specify the encoding to use for de- and encoding files.<br>
 
 ### `options.assertFormatting = true`
-Optional. If true, the plugin will check handling the file without changing it's contents would alter the formatting due to strange notation in the original file or inaccurate parsing of whitespace. If so, the plugin will emit an error.
+Optional. If true, the plugin will check if handling the file without changing it's contents would alter the formatting due to strange notation in the original file or inaccurate parsing of whitespace. If so, the plugin will emit an error.
 
 <br>
 
