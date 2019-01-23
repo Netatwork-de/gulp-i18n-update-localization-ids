@@ -2,3 +2,4 @@
 /test/
 /dev/
 /coverage/
+/.travis.yml
