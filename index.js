@@ -21,6 +21,11 @@ module.exports = function (options = {}) {
     // Normalize plugin options:
     const encoding = option(options.encoding, 'utf8');
 
+    const emitCondition = option(options.emit, 'always');
+    if (!['always', 'onChangeOnly'].includes(emitCondition)) {
+        throw new TypeError('options.emit must be "always" or "onChangeOnly".');
+    }
+
     const idTemplate = option(options.idTemplate, postfix => `t${postfix}`);
     if (typeof idTemplate !== 'function') {
         throw new TypeError('options.idTemplate must be a function.');
@@ -141,8 +146,13 @@ module.exports = function (options = {}) {
             }
         }
 
+        const outContents = serialize(dom);
+        if (emitCondition === 'onChangeOnly' && outContents === inContents) {
+            return;
+        }
+
         const outFile = inFile.clone({contents: false});
-        outFile.contents = Buffer.from(serialize(dom), encoding);
+        outFile.contents = Buffer.from(outContents, encoding);
         this.push(outFile);
     });
 };
