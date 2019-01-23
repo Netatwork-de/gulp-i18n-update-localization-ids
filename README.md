@@ -25,7 +25,6 @@ The task is a transform stream that applies the following actions to each file:
         + ...regererating duplicates ids (per file)...
         + ...or adding missing ids.
     + When the localized content or attribute is not present or empty, the localization id is removed.
-        + This will not apply to empty attributes!
 + Throw an error if a non-whitelisted tag is already localized or has text content.
 + Throw an error if a tag contains both text and non-text content.
 
