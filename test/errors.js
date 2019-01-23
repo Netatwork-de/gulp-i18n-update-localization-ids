@@ -3,6 +3,14 @@
 const test = require('ava');
 const {transformFailsTest} = require('./utility/tests');
 
+test('html documents', transformFailsTest({
+    whitelist: []
+}, `<!DOCTYPE html>
+<html>
+    <head><title></title></head>
+    <body></body>
+</html>`, /not.*supported/i));
+
 test('non-whitelisted tag has text content', transformFailsTest({
     whitelist: []
 }, `
@@ -26,6 +34,12 @@ test('non-whitelisted content is already localized', transformFailsTest({
 }, `
     <h1 t="[text]foo">Hello World</h1>
 `, /content.*localized/i));
+
+test('non-whitelisted content', transformFailsTest({
+    whitelist: [{tagName: 'h1', content: false}]
+}, `
+    <h1>foo</h1>
+`, /content.*whitelisted/i));
 
 test('mixed content', transformFailsTest({
     whitelist: [{tagName: 'h1'}]

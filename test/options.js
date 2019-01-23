@@ -1,7 +1,12 @@
 'use strict';
 
 const test = require('ava');
+const createPlugin = require('..');
 const {transformTest, transformFailsTest} = require('./utility/tests');
+
+test('no options', t => {
+    t.throws(() => createPlugin());
+});
 
 test('idTemplate', transformTest({
     whitelist: [{tagName: 'h1'}],
@@ -25,3 +30,27 @@ test('idTemplate (return no id)', transformFailsTest({
 }, `
     <h1>foo</h1>
 `, /idtemplate.*invalid id/i));
+
+test('idTemplate (return fixed id)', transformFailsTest({
+    whitelist: [{tagName: 'h1'}],
+    idTemplate: () => 'foo'
+}, `
+    <h1>foo</h1>
+    <h1>bar</h1>
+`, /idtemplate.*same.*id/i));
+
+test('idTemplate validation', t => {
+    t.throws(() => createPlugin({
+        whitelist: [],
+        idTemplate: 'foo'
+    }));
+});
+
+test('whitelist validation', t => {
+    t.throws(() => createPlugin({}));
+    t.throws(() => createPlugin({whitelist: {}}));
+    t.throws(() => createPlugin({whitelist: ['foo']}));
+    t.throws(() => createPlugin({whitelist: [{tagName: 42}]}));
+    t.throws(() => createPlugin({whitelist: [{tagName: 'foo', attrs: {}}]}));
+    t.throws(() => createPlugin({whitelist: [{tagName: 'foo', content: 'foo'}]}));
+});

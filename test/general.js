@@ -3,6 +3,14 @@
 const test = require('ava');
 const {transformTest, transformFailsTest} = require('./utility/tests');
 
+test('no content localization', transformTest({
+    whitelist: [{tagName: 'h1', content: false, attrs: ['foo']}]
+}, `
+    <h1 foo="bar"></h1>
+`, `
+    <h1 foo="bar" t="[foo]t0"></h1>
+`));
+
 test('add new id', transformTest({
     whitelist: [{tagName: 'h1', attrs: ['foo']}]
 }, `
