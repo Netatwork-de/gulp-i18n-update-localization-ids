@@ -2,6 +2,14 @@
   "name": "gulp-i18n-update-uid",
   "version": "0.1.0",
   "description": "Update i18n uids in html files.",
+  "keywords": [
+    "gulp",
+    "i18n",
+    "update",
+    "uid",
+    "html",
+    "aurelia"
+  ],
   "main": "index.js",
   "scripts": {
     "start": "gulp",
@@ -37,6 +45,7 @@
       "lcov"
     ]
   },
+  "repository": "github:Netatwork-de/gulp-i18n-update-uid",
   "author": "Net at Work GmbH",
   "license": "Apache-2.0"
 }
