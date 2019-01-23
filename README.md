@@ -31,7 +31,7 @@ The task is a transform stream that applies the following actions to each file:
 
 ### `options.whitelist`
 **This option is required.**<br>
-It defines a whitelist of of tags and attributes that will be localized.
+It defines a whitelist of tags and attributes that will be localized.
 
 ```js
 whitelist: [
