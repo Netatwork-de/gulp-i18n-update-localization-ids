@@ -25,18 +25,3 @@ test('idTemplate (return no id)', transformFailsTest({
 }, `
     <h1>foo</h1>
 `, /idtemplate.*invalid id/i));
-
-test('disallow non-fragments', transformFailsTest({
-    whitelist: []
-}, `<!DOCTYPE html>
-<html>
-</html>`, /html fragments/i));
-
-test('assert formatting', transformFailsTest({
-    whitelist: []
-}, `<div foo="bar"bar="baz"></div>`, /formatting/i));
-
-test('ignore formatting', transformTest({
-    whitelist: [],
-    assertFormatting: false
-}, `<div foo="bar"bar="baz"></div>`, `<div foo="bar" bar="baz"></div>`));

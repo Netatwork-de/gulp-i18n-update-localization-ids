@@ -24,7 +24,7 @@ The task is a transform stream that applies the following actions to each file:
         + ...using existing ids,...
         + ...regererating duplicates ids (per file)...
         + ...or adding missing ids.
-    + When the localized target (element content or attributes) is not present, the localization id is removed.
+    + When the localized content or attribute is not present or empty, the localization id is removed.
         + This will not apply to empty attributes!
 + Throw an error if a non-whitelisted tag is already localized or has text content.
 + Throw an error if a tag contains both text and non-text content.
@@ -60,9 +60,6 @@ idTemplate: x => `foo-${x}`
 
 ### `options.encoding = 'utf8'`
 Optional. Specify the encoding to use for de- and encoding files.<br>
-
-### `options.assertFormatting = true`
-Optional. If true, the plugin will check if handling the file without changing it's contents would alter the formatting due to strange notation in the original file or inaccurate parsing of whitespace. If so, the plugin will emit an error.
 
 <br>
 

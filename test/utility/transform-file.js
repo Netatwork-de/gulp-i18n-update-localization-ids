@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const Vinyl = require('vinyl');
 const path = require('path');

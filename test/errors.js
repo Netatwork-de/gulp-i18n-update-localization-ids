@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const test = require('ava');
 const {transformFailsTest} = require('./utility/tests');
@@ -14,6 +14,12 @@ test('non-whitelisted tag is already localized', transformFailsTest({
 }, `
     <h1 t="foo"></h1>
 `, /tag (has.*attribute)|(is.*localized)/i));
+
+test('non-whitelisted attribute is already localized', transformFailsTest({
+    whitelist: [{tagName: 'h1'}]
+}, `
+    <h1 t="[foo]baz" foo="bar"></h1>
+`, /attribute.*localized/i));
 
 test('mixed content', transformFailsTest({
     whitelist: [{tagName: 'h1'}]

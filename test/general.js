@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const test = require('ava');
 const {transformTest} = require('./utility/tests');
@@ -32,7 +32,7 @@ test('remove empty content or non-existing attributes', transformTest({
 `, `
     <h1></h1>
     <h1></h1>
-    <h1 foo="" t="[foo]baz"></h1>
+    <h1 foo=""></h1>
 `));
 
 test('fix content localization type', transformTest({
@@ -60,3 +60,16 @@ test('fix attribute formatting', transformTest({
 `, `
     <h1 t="[text]test;[foo]bar" foo="foo">a</h1>
 `));
+
+test('complex fragment', transformTest({
+    whitelist: [
+        {tagName: 'h1'},
+        {tagName: 'custom-elem', attrs: ['value'], content: 'html'}
+    ]
+}, `<template>
+    <h1>Hello World!</h1>
+    <custom-elem t="[html]t0" value="foo">bar</custom-elem>
+</template>`, `<template>
+    <h1 t="[text]t1">Hello World!</h1>
+    <custom-elem t="[html]t0;[value]t2" value="foo">bar</custom-elem>
+</template>`));

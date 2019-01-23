@@ -1,7 +1,7 @@
 'use strict';
 
 const PluginError = require('plugin-error');
-const {parseFragment, serialize} = require('parse5');
+const {parseFragment, parse, serialize} = require('parse5');
 const transform = require('./lib/transform');
 const contentsToString = require('./lib/contents-to-string');
 const {traverse, getAttr, setAttr, deleteAttr, analyzeContent} = require('./lib/dom');
@@ -19,7 +19,6 @@ function option(value, defaultValue) {
 module.exports = function (options = {}) {
     // Normalize plugin options:
     const encoding = option(options.encoding, 'utf8');
-    const assertFormatting = option(options.assertFormatting, true);
 
     const idTemplate = option(options.idTemplate, postfix => `t${postfix}`);
     if (typeof idTemplate !== 'function') {
@@ -52,17 +51,10 @@ module.exports = function (options = {}) {
         const inContents = (await contentsToString(inFile, encoding))
             .replace(/\r\n|\r/g, '\n');
 
-        // Throw on non-html-fragments because the current implementation
-        // messes up the formatting outside head and body tags:
-        if (/^(<!DOCTYPE|<html)/i.test(inContents)) {
-            throw new PluginError(packageName, `Only html fragments are supported. Not full html documents. File: ${inFile.path}`);
+        if (/^\<\!DOCTYPE/.test(inContents)) {
+            throw new PluginError(packageName, 'Html documents are not supported.');
         }
-
-        // Parse the html fragment:
         const dom = parseFragment(inContents, {sourceCodeLocationInfo: true});
-        if (assertFormatting && serialize(dom) !== inContents) {
-            throw new PluginError(packageName, `Serializing changes would break the original formatting. File: ${inFile.path}`);
-        }
 
         const knownIds = new Set();
         const candidates = [];
