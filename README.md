@@ -68,6 +68,14 @@ ignore: [
             + `<RegExp>` - If the value matches the specified regexp.
             + `<function>` - If the function returns true for the value.
 
+### `options.emit`
+Optional. Control when to emit output files.
+```js
+emit: 'always'
+```
++ `'always'` - **Default.** Emit always.
++ `'onChangeOnly'` - Emit only if the file was modified by the plugin. *Choose this value, if you are using this plugin to overwrite files that you are currently working with.*
+
 ### `options.idTemplate = x => 't' + x`
 Optional. A function to generatea new id.
 ```js
