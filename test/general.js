@@ -1,7 +1,7 @@
 'use strict';
 
 const test = require('ava');
-const {transformTest} = require('./utility/tests');
+const {transformTest, transformFailsTest} = require('./utility/tests');
 
 test('add new id', transformTest({
     whitelist: [{tagName: 'h1', attrs: ['foo']}]
@@ -73,3 +73,12 @@ test('complex fragment', transformTest({
     <h1 t="[text]t1">Hello World!</h1>
     <custom-elem t="[html]t0;[value]t2" value="foo">bar</custom-elem>
 </template>`));
+
+test('whitelist content defaults', async t => {
+    await transformTest({
+        whitelist: [{tagName: 'div'}]
+    }, `<div>foo</div>`, `<div t="[text]t0">foo</div>`)(t);
+    await transformFailsTest({
+        whitelist: [{tagName: 'custom-elem'}]
+    }, `<custom-elem>foo</custom-elem>`, /not.*whitelisted/i)(t);
+});
