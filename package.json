@@ -33,7 +33,8 @@
   "nyc": {
     "reporter": [
       "text",
-      "text-summary"
+      "text-summary",
+      "lcov"
     ]
   },
   "author": "Net at Work GmbH",
