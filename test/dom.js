@@ -1,7 +1,7 @@
 'use strict';
 
 const test = require('ava');
-const {traverse, getAttr, setAttr, deleteAttr} = require('../lib/dom');
+const {traverse, getAttr, setAttr, deleteAttr} = require('../lib/dom')();
 
 test('get attr', t => {
     t.is(getAttr({}, 'foo'), undefined);

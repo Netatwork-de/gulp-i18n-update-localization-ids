@@ -3,6 +3,7 @@
 const test = require('ava');
 const LocalizationKey = require('../lib/localization-key');
 const DomRelatedError = require('../lib/dom-related-error');
+const createDomUtility = require('../lib/dom');
 
 test('set attribute-id-pair', t => {
     const key = new LocalizationKey();
@@ -67,11 +68,13 @@ test('parse', t => {
 });
 
 test('parse from dom', t => {
-    t.is(LocalizationKey.fromDom({}, {}).format(), '');
-    t.is(LocalizationKey.fromDom({}, {attrs: [{name: 't', value: 'foo'}]}).format(), '[text]foo');
+    const domUtility = createDomUtility();
+
+    t.is(LocalizationKey.fromDom(domUtility, {}, {}).format(), '');
+    t.is(LocalizationKey.fromDom(domUtility, {}, {attrs: [{name: 't', value: 'foo'}]}).format(), '[text]foo');
 
     const err = t.throws(() => {
-        LocalizationKey.fromDom({path: '/foo'}, {
+        LocalizationKey.fromDom(domUtility, {path: '/foo'}, {
             sourceCodeLocation: {
                 startLine: 7,
                 startCol: 42

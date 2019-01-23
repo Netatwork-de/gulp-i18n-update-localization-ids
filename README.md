@@ -48,6 +48,26 @@ whitelist: [
         + `'text'` - Localize content as text. *This is the default if tagName does **not** contain a hyphen.*
         + `false` - Don't localize content. *This is the default if tagName contains a hyphen.*
 
+### `options.ignore`
+Optional. Specify what parts of a html fragment are ignored.<br>
+*The specified configuration will be flattened.*
+```js
+ignore: [
+    // Ignore content that matches "ignore me":
+    {content: 'ignore me'},
+
+    // Ignore content like "${foo.bar}":
+    {content: v => v.startsWith('${') && v.endsWith('}')}
+]
+```
++ ignore `<IgnoreItem>` - This can be any of the following:
+    + `<array>` - An array of ignore items.
+    + `<object>` - An object with the following properties:
+        + content - Ignore tag text content (trimmed) if it matches one of the following conditions:
+            + `<string>` - If the value matches the specified one.
+            + `<RegExp>` - If the value matches the specified regexp.
+            + `<function>` - If the function returns true for the value.
+
 ### `options.idTemplate = x => 't' + x`
 Optional. A function to generatea new id.
 ```js
@@ -73,6 +93,8 @@ The following example html fragment will be transformed into the second one usin
 
     <custom-elem t="[title]foo" title="Copy"></custom-elem>
     <custom-elem t="[title]foo" title="and">paste</custom-elem>
+
+    <h1>${example.localizedTitle}</h1>
 </template>
 ```
 ```html
@@ -83,5 +105,7 @@ The following example html fragment will be transformed into the second one usin
 
     <custom-elem t="[title]foo" title="Copy"></custom-elem>
     <custom-elem t="[title]foo-2;[html]foo-3" title="and">paste</custom-elem>
+
+    <h1>${example.localizedTitle}</h1>
 </template>
 ```

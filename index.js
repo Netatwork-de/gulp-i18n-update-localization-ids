@@ -2,12 +2,13 @@
 
 const PluginError = require('plugin-error');
 const {parseFragment, parse, serialize} = require('parse5');
+const {name: packageName} = require('./package.json');
 const transform = require('./lib/transform');
 const contentsToString = require('./lib/contents-to-string');
-const {traverse, getAttr, setAttr, deleteAttr, analyzeContent} = require('./lib/dom');
+const createDomUtility = require('./lib/dom');
 const DomRelatedError = require('./lib/dom-related-error');
 const LocalizationKey = require('./lib/localization-key');
-const {name: packageName} = require('./package.json');
+const IgnoreMap = require('./lib/ignore-map');
 
 const CUSTOM_TAG_NAME_REGEXP = /-/;
 const LOCALIZATION_ID_REGEXP = /^[a-z0-9_.-]+$/i;
@@ -46,6 +47,14 @@ module.exports = function (options = {}) {
         return [entry.tagName, {attrs: new Set(attrs), content}]
     }));
 
+    const ignore = new IgnoreMap();
+    if (options.ignore) {
+        ignore.use(options.ignore);
+    }
+
+    const domUtility = createDomUtility({ignore});
+    const {traverse, getAttr, setAttr, deleteAttr, analyzeContent} = domUtility;
+
     // Return a stream to transform each file:
     return transform(async function(inFile) {
         const inContents = (await contentsToString(inFile, encoding))
@@ -65,7 +74,7 @@ module.exports = function (options = {}) {
                 if (hasText && hasNonText) {
                     throw new DomRelatedError(inFile, node, 'Tag contains both text and non-text content.');
                 }
-                const originalKey = LocalizationKey.fromDom(inFile, node);
+                const originalKey = LocalizationKey.fromDom(domUtility, inFile, node);
                 for (const id of originalKey.ids()) {
                     knownIds.add(id);
                 }
