@@ -18,7 +18,7 @@ function transformFailsTest(options, input, match) {
                 throw err;
             }
         }
-    }
+    };
 }
 
 module.exports = {
