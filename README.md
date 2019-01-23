@@ -1,5 +1,6 @@
 # gulp-i18n-update-uid
 [![Build Status](https://travis-ci.com/Netatwork-de/gulp-i18n-update-uid.svg?branch=master)](https://travis-ci.com/Netatwork-de/gulp-i18n-update-uid)
+[![Coverage Status](https://coveralls.io/repos/github/Netatwork-de/gulp-i18n-update-uid/badge.svg?branch=master)](https://coveralls.io/github/Netatwork-de/gulp-i18n-update-uid?branch=master)
 [![Npm Version](https://img.shields.io/npm/v/ulp-i18n-update-uid.svg) ![Npm License](https://img.shields.io/npm/l/ulp-i18n-update-uid.svg)](https://npmjs.org/package/gulp-i18n-update-uid)
 
 Gulp task for updating i18n uids in html files.
