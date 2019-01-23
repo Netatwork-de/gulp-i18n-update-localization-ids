@@ -7,10 +7,12 @@
     "start": "gulp",
     "test": "nyc -- ava --verbose",
     "watch": "ava --watch --verbose",
-    "prepack": "npm test"
+    "prepack": "npm test",
+    "report-coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {
     "ava": "^1.1.0",
+    "coveralls": "^3.0.2",
     "gulp": "^4.0.0",
     "nyc": "^13.1.0"
   },
@@ -26,6 +28,12 @@
   "ava": {
     "files": [
       "test/*.js"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "text",
+      "text-summary"
     ]
   },
   "author": "Net at Work GmbH",
