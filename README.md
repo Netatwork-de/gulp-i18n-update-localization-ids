@@ -1,7 +1,7 @@
 # gulp-i18n-update-localization-ids
 [![Build Status](https://travis-ci.com/Netatwork-de/gulp-i18n-update-localization-ids.svg?branch=master)](https://travis-ci.com/Netatwork-de/gulp-i18n-update-localization-ids)
 [![Coverage Status](https://coveralls.io/repos/github/Netatwork-de/gulp-i18n-update-localization-ids/badge.svg?branch=master)](https://coveralls.io/github/Netatwork-de/gulp-i18n-update-localization-ids?branch=master)
-[![Npm Version](https://img.shields.io/npm/v/ulp-i18n-update-localization-ids.svg) ![Npm License](https://img.shields.io/npm/l/ulp-i18n-update-localization-ids.svg)](https://npmjs.org/package/gulp-i18n-update-localization-ids)
+[![Npm Version](https://img.shields.io/npm/v/gulp-i18n-update-localization-ids.svg) ![Npm License](https://img.shields.io/npm/l/gulp-i18n-update-localization-ids.svg)](https://npmjs.org/package/gulp-i18n-update-localization-ids)
 
 Gulp task for updating i18n localization ids in html files.
 ```bash
