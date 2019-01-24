@@ -1,6 +1,6 @@
 {
   "name": "gulp-i18n-update-uid",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Update i18n uids in html files.",
   "keywords": [
     "gulp",
