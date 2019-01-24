@@ -96,6 +96,10 @@ Optional. Specify the attribute for storing localization keys.
 ### `options.encoding = 'utf8'`
 Optional. Specify the encoding to use for de- and encoding files.
 
+### `options.LocalizationKey`
+Optional. Specify the class that represents a localization key.<br>
+The class must implement all members of the default one located in `/lib/localization-key.js`.
+
 <br>
 
 # Example

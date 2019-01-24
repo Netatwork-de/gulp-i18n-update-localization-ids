@@ -7,7 +7,7 @@ const transform = require('./lib/transform');
 const contentsToString = require('./lib/contents-to-string');
 const createDomUtility = require('./lib/dom');
 const DomRelatedError = require('./lib/dom-related-error');
-const LocalizationKey = require('./lib/localization-key');
+const DefaultLocalizationKey = require('./lib/localization-key');
 const IgnoreMap = require('./lib/ignore-map');
 
 const CUSTOM_TAG_NAME_REGEXP = /-/;
@@ -26,6 +26,8 @@ module.exports = function (options = {}) {
     if (!['always', 'onChangeOnly'].includes(emitCondition)) {
         throw new TypeError('options.emit must be "always" or "onChangeOnly".');
     }
+
+    const LocalizationKey = option(options.LocalizationKey, DefaultLocalizationKey);
 
     const idTemplate = option(options.idTemplate, postfix => `t${postfix}`);
     if (typeof idTemplate !== 'function') {
