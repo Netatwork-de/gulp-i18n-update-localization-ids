@@ -122,3 +122,26 @@ The following example html fragment will be transformed into the second one usin
     <h1>${example.localizedTitle}</h1>
 </template>
 ```
+
+<br/>
+
+
+
+# Development
+```bash
+git clone https://github.com/Netatwork-de/gulp-i18n-update-uid
+cd gulp-i18n-update-uid
+
+# Install dependencies:
+# (this is also needed for publishing)
+npm i
+```
+
+### Running Tests
+```bash
+# Run tests and coverage:
+npm test
+
+# Run tests and watch for changes:
+npm run watch
+```
