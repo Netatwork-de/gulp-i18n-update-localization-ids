@@ -50,23 +50,28 @@ whitelist: [
 
 ### `options.ignore`
 Optional. Specify what parts of a html fragment are ignored.<br>
-*The specified configuration will be flattened.*
+Matching parts will not be modified or checked against errors.
 ```js
 ignore: [
     // Ignore content that matches "ignore me":
     {content: 'ignore me'},
 
     // Ignore content like "${foo.bar}":
-    {content: v => v.startsWith('${') && v.endsWith('}')}
+    {content: v => v.startsWith('${') && v.endsWith('}')},
+
+    // Ignore <code> tags and all children:
+    {tagName: 'code'}
 ]
 ```
 + ignore `<IgnoreItem>` - This can be any of the following:
     + `<array>` - An array of ignore items.
     + `<object>` - An object with the following properties:
-        + content - Ignore tag text content (trimmed) if it matches one of the following conditions:
-            + `<string>` - If the value matches the specified one.
-            + `<RegExp>` - If the value matches the specified regexp.
-            + `<function>` - If the function returns true for the value.
+        + content `<Rule>` - Ignore tag text content if it matches the rule.
+        + tagName `<Rule>` - Ignore a tag and it's subtree if it matches the rule.
++ `<Rule>` can be one of the following:
+    + `<string>` - If the value matches the specified one.
+    + `<function>` - If the function returns true for the value.
+    + `<RegExp>` - If the value matches the specified regexp. *This is not recommended!*
 
 ### `options.emit`
 Optional. Control when to emit output files.
