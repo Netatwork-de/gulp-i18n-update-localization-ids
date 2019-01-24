@@ -12,14 +12,13 @@ npm i -D gulp-i18n-update-uid
 
 # Usage
 ```js
-gulp.src('./src/**.html')
-    .pipe(i18nUpdateUid({
-        // ...options...
-    }))
-    .pipe(gulp.dest('./dist'));
-```
+const i18nUpdateUid = require('gulp-i18n-update-uid');
 
-The task is a transform stream that applies the following actions to each file:
+const task = i18nUpdateUid({
+    // ...options...
+});
+```
+The task is a transform stream that processes each file and emits updated files:
 + For each tag that is whitelisted:
     + It is ensured that localizable content and attributes have unique id's by...
         + ...using existing ids,...
@@ -97,7 +96,30 @@ Optional. Specify the encoding to use for de- and encoding files.<br>
 <br>
 
 # Example
-The following example html fragment will be transformed into the second one using the example options.
+The following example will watch and process your html files during development.<br/>
+*You should be using an editor that reloads the file when it changes like vs code.*
+```js
+const gulp = require('gulp');
+const i18nUpdateUid = require('gulp-i18n-update-uid');
+
+exports.watch = () => gulp.watch(['./src/**.html'], () => {
+    return gulp.src('./src/**.html')
+        .pipe(i18nUpdateUid({
+            emit: 'onChangeOnly',
+            whitelist: [
+                {tagName: 'h1'},
+                {tagName: 'img', attrs: ['alt']},
+                {tagName: 'custom-elem', attrs: ['title'], content: 'html'}
+            ],
+            ignore: [
+                {content: v => v.startsWith('${') && v.endsWith('}')}
+            ],
+            idTemplate: x => `foo-${x}`
+        }))
+        .pipe(gulp.dest('./src'));
+});
+```
+If you run `gulp watch` and save the following file...
 ```html
 <template>
     <h1>Hello World!</h1>
@@ -110,6 +132,7 @@ The following example html fragment will be transformed into the second one usin
     <h1>${example.localizedTitle}</h1>
 </template>
 ```
+...it will be transformed into this:
 ```html
 <template>
     <h1 t="[text]foo-1">Hello World!</h1>
