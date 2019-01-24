@@ -1,6 +1,6 @@
 {
   "name": "gulp-i18n-update-localization-ids",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Update i18n localization ids in html files.",
   "keywords": [
     "gulp",
