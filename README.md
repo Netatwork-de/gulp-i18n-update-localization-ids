@@ -90,8 +90,11 @@ idTemplate: x => `foo-${x}`
 + x `<number>` - A number that should be included in the id.
 + returns `<string>` - Any string matching `/^[a-z0-9_.-]+$/`.
 
+### `options.keyAttribute = 't'`
+Optional. Specify the attribute for storing localization keys.
+
 ### `options.encoding = 'utf8'`
-Optional. Specify the encoding to use for de- and encoding files.<br>
+Optional. Specify the encoding to use for de- and encoding files.
 
 <br>
 

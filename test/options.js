@@ -54,3 +54,12 @@ test('whitelist validation', t => {
     t.throws(() => createPlugin({whitelist: [{tagName: 'foo', attrs: {}}]}));
     t.throws(() => createPlugin({whitelist: [{tagName: 'foo', content: 'foo'}]}));
 });
+
+test('keyAttribute', transformTest({
+    whitelist: [{tagName: 'h1'}],
+    keyAttribute: 'foo'
+}, `
+    <h1>bar</h1>
+`, `
+    <h1 foo="[text]t0">bar</h1>
+`));

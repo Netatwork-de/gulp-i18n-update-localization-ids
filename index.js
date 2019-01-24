@@ -20,6 +20,7 @@ function option(value, defaultValue) {
 module.exports = function (options = {}) {
     // Normalize plugin options:
     const encoding = option(options.encoding, 'utf8');
+    const keyAttribute = option(options.keyAttribute, 't');
 
     const emitCondition = option(options.emit, 'always');
     if (!['always', 'onChangeOnly'].includes(emitCondition)) {
@@ -86,8 +87,8 @@ module.exports = function (options = {}) {
                 candidates.push({node, hasText, whitelisted, originalKey});
             } else if (hasText) {
                 throw new DomRelatedError(inFile, node, 'Non-whitelisted tag has text content.');
-            } else if (getAttr(node, 't')) {
-                throw new DomRelatedError(inFile, node, 'Non-whitelisted tag has a "t" attribute.');
+            } else if (getAttr(node, keyAttribute)) {
+                throw new DomRelatedError(inFile, node, `Non-whitelisted tag has a ${keyAttribute} attribute.`);
             }
         }
 
@@ -140,9 +141,9 @@ module.exports = function (options = {}) {
             }
 
             if (newKey.size > 0) {
-                setAttr(node, 't', newKey.format());
+                setAttr(node, keyAttribute, newKey.format());
             } else {
-                deleteAttr(node, 't');
+                deleteAttr(node, keyAttribute);
             }
         }
 
