@@ -3,7 +3,7 @@
 const test = require('ava');
 const path = require('path');
 const Vinyl = require('vinyl');
-const i18nUpdateUid = require('..');
+const i18nUpdateLocalizationIds = require('..');
 
 const basePath = path.resolve(__dirname, './data');
 const virtualFilename = path.resolve(basePath, 'virtual.html');
@@ -14,7 +14,7 @@ const FINAL_CONTENT = '<h1 t="[text]bar">foo</h1>';
 function emitCondition(conditionType) {
     return input => new Promise((resolve, reject) => {
         let emitted = false;
-        const stream = i18nUpdateUid({
+        const stream = i18nUpdateLocalizationIds({
             whitelist: [{tagName: 'h1'}],
             emit: conditionType
         });
@@ -45,7 +45,7 @@ test('always', async t => {
 });
 
 test('validation', t => {
-    t.throws(() => i18nUpdateUid({
+    t.throws(() => i18nUpdateLocalizationIds({
         whitelist: [],
         emit: 'No!'
     }));

@@ -1,20 +1,20 @@
-# gulp-i18n-update-uid
-[![Build Status](https://travis-ci.com/Netatwork-de/gulp-i18n-update-uid.svg?branch=master)](https://travis-ci.com/Netatwork-de/gulp-i18n-update-uid)
-[![Coverage Status](https://coveralls.io/repos/github/Netatwork-de/gulp-i18n-update-uid/badge.svg?branch=master)](https://coveralls.io/github/Netatwork-de/gulp-i18n-update-uid?branch=master)
-[![Npm Version](https://img.shields.io/npm/v/ulp-i18n-update-uid.svg) ![Npm License](https://img.shields.io/npm/l/ulp-i18n-update-uid.svg)](https://npmjs.org/package/gulp-i18n-update-uid)
+# gulp-i18n-update-localization-ids
+[![Build Status](https://travis-ci.com/Netatwork-de/gulp-i18n-update-localization-ids.svg?branch=master)](https://travis-ci.com/Netatwork-de/gulp-i18n-update-localization-ids)
+[![Coverage Status](https://coveralls.io/repos/github/Netatwork-de/gulp-i18n-update-localization-ids/badge.svg?branch=master)](https://coveralls.io/github/Netatwork-de/gulp-i18n-update-localization-ids?branch=master)
+[![Npm Version](https://img.shields.io/npm/v/ulp-i18n-update-localization-ids.svg) ![Npm License](https://img.shields.io/npm/l/ulp-i18n-update-localization-ids.svg)](https://npmjs.org/package/gulp-i18n-update-localization-ids)
 
-Gulp task for updating i18n uids in html files.
+Gulp task for updating i18n localization ids in html files.
 ```bash
-npm i -D gulp-i18n-update-uid
+npm i -D gulp-i18n-update-localization-ids
 ```
 
 <br>
 
 # Usage
 ```js
-const i18nUpdateUid = require('gulp-i18n-update-uid');
+const i18nUpdateLocalizationIds = require('gulp-i18n-update-localization-ids');
 
-const task = i18nUpdateUid({
+const task = i18nUpdateLocalizationIds({
     // ...options...
 });
 ```
@@ -107,11 +107,11 @@ The following example will watch and process your html files during development.
 *You should be using an editor that reloads the file when it changes like vs code.*
 ```js
 const gulp = require('gulp');
-const i18nUpdateUid = require('gulp-i18n-update-uid');
+const i18nUpdateLocalizationIds = require('gulp-i18n-update-localization-ids');
 
 exports.watch = () => gulp.watch(['./src/**.html'], () => {
     return gulp.src('./src/**.html')
-        .pipe(i18nUpdateUid({
+        .pipe(i18nUpdateLocalizationIds({
             emit: 'onChangeOnly',
             whitelist: [
                 {tagName: 'h1'},
@@ -159,8 +159,8 @@ If you run `gulp watch` and save the following file...
 
 # Development
 ```bash
-git clone https://github.com/Netatwork-de/gulp-i18n-update-uid
-cd gulp-i18n-update-uid
+git clone https://github.com/Netatwork-de/gulp-i18n-update-localization-ids
+cd gulp-i18n-update-localization-ids
 
 # Install dependencies:
 # (this is also needed for publishing)

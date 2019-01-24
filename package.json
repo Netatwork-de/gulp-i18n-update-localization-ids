@@ -6,7 +6,8 @@
     "gulp",
     "i18n",
     "update",
-    "uid",
+    "localization",
+    "id",
     "html",
     "aurelia"
   ],
@@ -44,7 +45,7 @@
       "lcov"
     ]
   },
-  "repository": "github:Netatwork-de/gulp-i18n-update-uid",
+  "repository": "github:Netatwork-de/gulp-i18n-update-localization-ids",
   "author": "Net at Work GmbH",
   "license": "Apache-2.0"
 }
