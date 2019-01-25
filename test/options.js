@@ -2,6 +2,7 @@
 
 const test = require('ava');
 const createPlugin = require('..');
+const LocalizationKey = require('../lib/localization-key');
 const {transformTest, transformFailsTest} = require('./utility/tests');
 
 test('no options', t => {
@@ -62,4 +63,17 @@ test('keyAttribute', transformTest({
     <h1>bar</h1>
 `, `
     <h1 foo="[text]t0">bar</h1>
+`));
+
+test('LocalizationKey', transformTest({
+    whitelist: [{tagName: 'div'}],
+    LocalizationKey: class CustomKey extends LocalizationKey {
+        format() {
+            return 'bar';
+        }
+    }
+}, `
+    <div>foo</div>
+`, `
+    <div t="bar">foo</div>
 `));
