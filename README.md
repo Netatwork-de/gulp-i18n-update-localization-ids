@@ -105,7 +105,7 @@ The class must implement all members of the default one located in `/lib/localiz
 ### `mergeOptions(defaults, overrides)`
 Utility for merging plugin options.
 ```js
-const mergeOptions = require('gulp-i18n-update-localization-ids/lib/merge-options');
+const {mergeOptions} = require('gulp-i18n-update-localization-ids');
 
 const task = i18nUpdateLocalizationIds(mergeOptions(defaults, overrides));
 ```

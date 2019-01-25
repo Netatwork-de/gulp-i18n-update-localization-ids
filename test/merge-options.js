@@ -1,7 +1,7 @@
 'use strict';
 
 const test = require('ava');
-const mergeOptions = require('../lib/merge-options');
+const {mergeOptions} = require('..');
 
 test('whitelist', t => {
     t.deepEqual(

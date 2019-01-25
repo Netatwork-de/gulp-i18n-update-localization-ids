@@ -9,6 +9,7 @@ const createDomUtility = require('./lib/dom');
 const DomRelatedError = require('./lib/dom-related-error');
 const DefaultLocalizationKey = require('./lib/localization-key');
 const IgnoreMap = require('./lib/ignore-map');
+const mergeOptions = require('./lib/merge-options');
 
 const CUSTOM_TAG_NAME_REGEXP = /-/;
 const LOCALIZATION_ID_REGEXP = /^[a-z0-9_.-]+$/i;
@@ -159,3 +160,5 @@ module.exports = function (options = {}) {
         this.push(outFile);
     });
 };
+
+module.exports.mergeOptions = mergeOptions;
