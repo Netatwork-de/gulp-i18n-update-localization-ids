@@ -102,6 +102,55 @@ The class must implement all members of the default one located in `/lib/localiz
 
 <br>
 
+### `mergeOptions(defaults, overrides)`
+Utility for merging plugin options.
+```js
+const mergeOptions = require('gulp-i18n-update-localization-ids/lib/merge-options');
+
+const task = i18nUpdateLocalizationIds(mergeOptions(defaults, overrides));
+```
++ defaults `<object>` - Default plugin options.
++ overrides `<object>` - Plugin options to override.
++ returns `<object>` - Merged plugin options.
+
+Options are merged as follows:
++ `whitelist` will contain all entries from defaults and overrides.
++ `ignore` will contain all ignore items from defaults and overrides.
++ all other options will be set from `overrides` or `defaults` if specified.
+
+```js
+merge({
+    emit: 'onChangeOnly',
+    whitelist: [ {tagName: 'foo'} ],
+    ignore: {content: 'bar'}
+}, {
+    idTemplate: x => `foo-${x}`,
+    whitelist: [ {tagName: 'bar'} ],
+    ignore: [
+        {content: 'foo'},
+        {tagName: 'code'}
+    ]
+});
+// will be merged to:
+{
+    whitelist: [
+        {tagName: 'foo'},
+        {tagName: 'bar'}
+    ],
+    ignore: [
+        {content: 'bar'},
+        [
+            {content: 'foo'},
+            {tagName: 'code'}
+        ]
+    ],
+    emit: 'onChangeOnly',
+    idTemplate: x => `foo-${x}`
+}
+```
+
+<br>
+
 # Example
 The following example will watch and process your html files during development.<br/>
 *You should be using an editor that reloads the file when it changes like vs code.*
