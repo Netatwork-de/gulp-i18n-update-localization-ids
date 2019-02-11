@@ -38,6 +38,18 @@ test('allow special characters in attribute names', transformTest({
     <div foo.bar="foo"></div>
 `));
 
+test('preserve original formatting between tag name and attributes', transformTest({
+    whitelist: [{tagName: 'div'}]
+}, `
+    <div foo
+        bar="baz"></div>
+    <div\n\tbar="foo">foo</div>
+`, `
+    <div foo
+        bar="baz"></div>
+    <div\n\tbar="foo" t="[text]t0">foo</div>
+`));
+
 test('require original source', t => {
     const source = '<div></div>';
     const dom = parseFragment(source);
