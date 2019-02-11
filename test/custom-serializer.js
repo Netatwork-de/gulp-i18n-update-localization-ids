@@ -25,9 +25,9 @@ test('prevent escaping of text node content', transformTest({
 test('prevent adding empty attribute values', transformTest({
     whitelist: []
 }, `
-    <div foo="foo" bar></div>
+    <div foo="" bar></div>
 `, `
-    <div foo="foo" bar></div>
+    <div foo="" bar></div>
 `));
 
 test('allow special characters in attribute names', transformTest({
