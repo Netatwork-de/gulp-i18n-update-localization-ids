@@ -133,7 +133,7 @@ module.exports = function (options = {}) {
                 throw new DomRelatedError(inFile, node, 'Content is not whitelisted to be localized.');
             }
             for (const attr of whitelisted.attrs) {
-                if (getAttr(node, attr)) {
+                if (typeof getAttr(node, attr) === 'string') {
                     const preferredId = originalKey.get(attr);
                     newKey.set(attr, getOrCreateUniqueId(preferredId));
                 }

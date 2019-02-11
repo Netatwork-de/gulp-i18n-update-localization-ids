@@ -31,7 +31,7 @@ test('reuse existing id', transformTest({
     <h1 foo="bar" t="[foo]baz"></h1>
 `));
 
-test('remove empty content or non-existing attributes', transformTest({
+test('remove for non-existing attributes', transformTest({
     whitelist: [{tagName: 'h1', attrs: ['foo']}]
 }, `
     <h1 t="foo"></h1>
@@ -40,7 +40,7 @@ test('remove empty content or non-existing attributes', transformTest({
 `, `
     <h1></h1>
     <h1></h1>
-    <h1 foo=""></h1>
+    <h1 foo="" t="[foo]baz"></h1>
 `));
 
 test('fix content localization type', transformTest({
