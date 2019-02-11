@@ -1,7 +1,7 @@
 'use strict';
 
 const PluginError = require('plugin-error');
-const {parseFragment, parse, serialize} = require('parse5');
+const {parseFragment} = require('parse5');
 const {name: packageName} = require('./package.json');
 const transform = require('./lib/transform');
 const contentsToString = require('./lib/contents-to-string');
@@ -10,6 +10,7 @@ const DomRelatedError = require('./lib/dom-related-error');
 const DefaultLocalizationKey = require('./lib/localization-key');
 const IgnoreMap = require('./lib/ignore-map');
 const mergeOptions = require('./lib/merge-options');
+const CustomSerializer = require('./lib/custom-serializer');
 
 const CUSTOM_TAG_NAME_REGEXP = /-/;
 const LOCALIZATION_ID_REGEXP = /^[a-z0-9_.-]+$/i;
@@ -150,7 +151,8 @@ module.exports = function (options = {}) {
             }
         }
 
-        const outContents = serialize(dom);
+        const serializer = new CustomSerializer(dom, {}, inContents);
+        const outContents = serializer.serialize(dom);
         if (emitCondition === 'onChangeOnly' && outContents === inContents) {
             return;
         }
