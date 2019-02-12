@@ -37,11 +37,6 @@ module.exports = function (options = {}) {
         throw new TypeError('options.idTemplate must be a function.');
     }
 
-    const globallyKnownIds = option(options.globallyKnownIds, null);
-    if (globallyKnownIds && !(globallyKnownIds instanceof Map)) {
-        throw new TypeError('options.globallyKnownIds must be a Map instance.');
-    }
-
     if (!Array.isArray(options.whitelist)) {
         throw new TypeError('options.whitelist must be an array.');
     }
@@ -102,20 +97,17 @@ module.exports = function (options = {}) {
             }
         }
 
-        function isGloballyKnownId(id) {
-            if (globallyKnownIds) {
-                const origin = globallyKnownIds.get(id);
-                return origin && origin !== inFile.path;
-            }
+        if (idTemplate.onFile) {
+            idTemplate.onFile(inFile, knownIds);
         }
 
         let nextIdPostfix = 0;
         const assignedPreferredIds = new Set();
         function getOrCreateUniqueId(id) {
-            if (!id || assignedPreferredIds.has(id) || isGloballyKnownId(id)) {
+            if (!id || assignedPreferredIds.has(id)) {
                 let lastGeneratedId;
                 do {
-                    id = idTemplate(nextIdPostfix, inFile);
+                    id = idTemplate(nextIdPostfix, inFile, knownIds);
                     if (typeof id !== 'string' || !LOCALIZATION_ID_REGEXP.test(id)) {
                         throw new PluginError(packageName, `options.idTemplate returned an invalid id: ${id}.`);
                     }
@@ -126,13 +118,10 @@ module.exports = function (options = {}) {
                     lastGeneratedId = id;
 
                     nextIdPostfix++;
-                } while (knownIds.has(id) || isGloballyKnownId(id));
+                } while (knownIds.has(id));
             }
             knownIds.add(id);
             assignedPreferredIds.add(id);
-            if (globallyKnownIds) {
-                globallyKnownIds.set(id, inFile.path);
-            }
             return id;
         }
 

@@ -89,16 +89,17 @@ idTemplate: (x, file) => `foo-${x}`
 ```
 + x `<number>` - A number that should be included in the id.
 + file `<Vinyl>` - The input file.
++ knownIds `<Set>` - A set of ids that are known for that input file.
 + returns `<string>` - Any string matching `/^[a-z0-9_.-]+$/`.
 
-### `options.globallyKnownIds`
-Optional. A map of (re-)assigned ids to file paths. If specified, it will be ensured, that all ids are unique across all processed files.
+In addition, an id template can have a function that is called for every processed file after it has been scanned and before new ids are generated. This is internally used by the `prefixFilename` template to avoid using prefixes that have been used in previous files.
 ```js
-globallyKnownIds: new Map()
+function template(x, file, knownIds) { ... }
+
+template.onFile = (file, knownIds) => {
+    // ...
+};
 ```
-+ It contains pairs like:
-    + `'t0' => '/path/to/file.html'`
-    + `'t1' => '/path/to/other/file.html'`
 
 ### `options.keyAttribute = 't'`
 Optional. Specify the attribute for storing localization keys.
@@ -114,9 +115,9 @@ The class must implement all members of the default one located in `/lib/localiz
 
 
 
-### `prefixFilename(innerTemplate, usedNames)`
-An id template for prefixing ids with the filename (without directories and extension).
-If the same filename exists in different directories, an increasing number is appended.
+### `prefixFilename([globalPrefixes])`
+If any prefix is already used in the processed file, that prefix will be used for new ids.
+Otherwise a prefix will be generated from the filename (without path and extension). If the same prefix has been used for previous files, an increasing number will be appended to the prefix.
 ```js
 const {prefixFilename} = require('gulp-i18n-update-localization-ids');
 
@@ -125,21 +126,38 @@ i18nUpdateLocalizationIds({
     idTemplate: prefixFilename()
 })
 ```
-+ innerTemplate `<function>` - Optional. The id template for generating the part after the encoded filename.
-+ usedNames `<Map>` - Optional. A map of used encoded names to file paths. This map is used to ensure that no name is used twice for different files.
-    + This option can be used to ensure consistency across plugin instances or executions.
-    + It contains pairs like:
-        + `'foo-bar' => '/path/to/foo-bar.html'`
-        + `'foo-bar1' => '/path/to/other/foo-bar.html'`
++ globalPrefixes `<Map>` - Optional. Provide your own empty map object to ensure prefix uniqueness across multiple plugin instances or executions. This map will be filled by the plugin while executing.
 
-| Filename | Generated ID | Inner Template |
-|-|-|-|
-| `foo/bar.html` | `bar-t0` | |
-| `baz/bar.html` | `bar1-t0` | |
-| `FooBar-Baz.Example.html` | `foo-bar-baz-example-t0` | |
-| `foo.html` | `foo-bar-0` | `x => 'bar-' + x` |
+| Filename | Generated ID |
+|-|-|
+| `foo/bar.html` | `bar.t0` |
+| `baz/bar.html` | `bar1.t0` |
+| `FooBar-Baz.Example.html` | `foo-bar-baz-example-t0` |
 
-*It is recommended to use this template in combination with the `globallyKnownIds` plugin option.*
+**Warning!** There is an edge case where the same prefix could be assigned to different files:<br>
+If you have a file `/b/foo.html` which already has an id `foo.t0` and you create a file `/a/foo.html`, an id `foo.t0` could be used for the new file as the prefixFilename template may not be aware of `/b/foo.html`s prefix at the time, the new file is processed. If you need to avoid this problem in a production build, you could use a linter that detects duplicate prefixes over multiple files or you could populate the global prefix map once before running your actual gulp task like so:
+```js
+const globalPrefixes = new Map()
+
+gulp.series(
+    // This will populate globalPrefixes, but will not write changes to disk:
+    () => gulp.src('./src/**.html')
+        .pipe(i18nUpdateLocalizationIds({
+            whitelist: [...],
+            globalPrefixes
+        }))
+        .resume(),
+
+    // At this time, it will be aware of all prefixes:
+    () => gulp.src('./src/**.html')
+        .pipe(i18nUpdateLocalizationIds({
+            whitelist: [...],
+            globalPrefixes
+        }))
+        // so you can safely write changes to disk:
+        .pipe(gulp.dest('./src'))
+)
+```
 
 <br>
 

@@ -11,15 +11,18 @@ test('no options', t => {
 });
 
 test('idTemplate', t => transformTest({
-    whitelist: [{tagName: 'h1'}],
-    idTemplate: (x, file) => {
+    whitelist: [{tagName: 'div'}],
+    idTemplate: (x, file, knownIds) => {
         t.true(file instanceof Vinyl);
+        t.true(knownIds instanceof Set);
         return `foo-${x}`
     }
 }, `
-    <h1>Hello World!</h1>
+    <div>Hello World!</div>
+    <div></div>
 `, `
-    <h1 t="[text]foo-0">Hello World!</h1>
+    <div t="[text]foo-0">Hello World!</div>
+    <div></div>
 `)(t));
 
 test('idTemplate (return invalid id)', transformFailsTest({
@@ -50,13 +53,6 @@ test('idTemplate validation', t => {
         idTemplate: 'foo'
     }));
 });
-
-test('globallyKnownIds validation', t => {
-    t.throws(() => createPlugin({
-        whitelist: [],
-        globallyKnownIds: 42
-    }));
-})
 
 test('whitelist validation', t => {
     t.throws(() => createPlugin({}));

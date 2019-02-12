@@ -12,34 +12,55 @@ test('general usage', transformTest({
     <div>foo</div>
     <div>bar</div>
 `), `
-    <div t="[text]foo-bar-t0">foo</div>
-    <div t="[text]foo-bar-t1">bar</div>
+    <div t="[text]foo-bar.t0">foo</div>
+    <div t="[text]foo-bar.t1">bar</div>
 `));
 
 test('multiple files', async t => {
-    const template = prefixFilename()
+    const idTemplate = prefixFilename();
     await transformTest({
         whitelist: [{tagName: 'div'}],
-        idTemplate: template
-    }, file('foo/bar.html', `<div>foo</div>`), `<div t="[text]bar-t0">foo</div>`)(t);
+        idTemplate
+    }, file('foo/bar.html', `<div>foo</div>`), `<div t="[text]bar.t0">foo</div>`)(t);
     await transformTest({
         whitelist: [{tagName: 'div'}],
-        idTemplate: template
-    }, file('baz/bar.html', `<div>foo</div>`), `<div t="[text]bar1-t0">foo</div>`)(t);
+        idTemplate
+    }, file('baz/bar.html', `<div>foo</div>`), `<div t="[text]bar1.t0">foo</div>`)(t);
     await transformTest({
         whitelist: [{tagName: 'div'}],
-        idTemplate: template
-    }, file('baz/bar.html', `<div>foo</div>`), `<div t="[text]bar1-t0">foo</div>`)(t);
+        idTemplate
+    }, file('baz/bar.html', `<div>foo</div>`), `<div t="[text]bar1.t0">foo</div>`)(t);
 });
 
-test('custom inner template', transformTest({
+test('reuse existing prefix', transformTest({
     whitelist: [{tagName: 'div'}],
-    idTemplate: prefixFilename(x => `${x}-bar`)
-}, file('foo.html', `<div>foo</div>`), `<div t="[text]foo-0-bar">foo</div>`));
+    idTemplate: prefixFilename()
+}, file('foo.html', `
+    <div t="[text]bar.t7">foo</div>
+    <div>bar</div>
+`), `
+    <div t="[text]bar.t7">foo</div>
+    <div t="[text]bar.t0">bar</div>
+`));
+
+test('avoid using prefixes from previous files', async t => {
+    const idTemplate = prefixFilename();
+    await transformTest({
+        whitelist: [{tagName: 'div'}],
+        idTemplate
+    }, file('foo.html', `<div t="[text]bar.t0">foo</div>`), `<div t="[text]bar.t0">foo</div>`)(t);
+    await transformTest({
+        whitelist: [{tagName: 'div'}],
+        idTemplate
+    }, file('bar.html', `<div>foo</div>`), `<div t="[text]bar1.t0">foo</div>`)(t);
+});
+
+test('ignore unprefixed ids', transformTest({
+    whitelist: [{tagName: 'div'}],
+    idTemplate: prefixFilename()
+}, `<div t="foo">foo</div>`, `<div t="[text]foo">foo</div>`));
 
 test('option validation', t => {
-    prefixFilename(() => 'foo');
-    prefixFilename(undefined, new Map());
+    prefixFilename(new Map());
     t.throws(() => prefixFilename(42));
-    t.throws(() => prefixFilename(undefined, 42));
 });
