@@ -1,6 +1,7 @@
 'use strict';
 
 const test = require('ava');
+const Vinyl = require('vinyl');
 const createPlugin = require('..');
 const LocalizationKey = require('../lib/localization-key');
 const {transformTest, transformFailsTest} = require('./utility/tests');
@@ -9,14 +10,17 @@ test('no options', t => {
     t.throws(() => createPlugin());
 });
 
-test('idTemplate', transformTest({
+test('idTemplate', t => transformTest({
     whitelist: [{tagName: 'h1'}],
-    idTemplate: x => `foo-${x}`
+    idTemplate: (x, file) => {
+        t.true(file instanceof Vinyl);
+        return `foo-${x}`
+    }
 }, `
     <h1>Hello World!</h1>
 `, `
     <h1 t="[text]foo-0">Hello World!</h1>
-`));
+`)(t));
 
 test('idTemplate (return invalid id)', transformFailsTest({
     whitelist: [{tagName: 'h1'}],
@@ -46,6 +50,13 @@ test('idTemplate validation', t => {
         idTemplate: 'foo'
     }));
 });
+
+test('globallyKnownIds validation', t => {
+    t.throws(() => createPlugin({
+        whitelist: [],
+        globallyKnownIds: 42
+    }));
+})
 
 test('whitelist validation', t => {
     t.throws(() => createPlugin({}));

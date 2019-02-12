@@ -29,7 +29,7 @@ test('ignore', t => {
 });
 
 test('atomic options', t => {
-    for (const key of ['emit', 'idTemplate', 'keyAttribute', 'encoding', 'LocalizationKey']) {
+    for (const key of ['emit', 'idTemplate', 'globallyKnownIds', 'keyAttribute', 'encoding', 'LocalizationKey']) {
         t.is(mergeOptions({[key]: 'foo'}, {})[key], 'foo');
         t.is(mergeOptions({}, {[key]: 'foo'})[key], 'foo');
         t.is(mergeOptions({[key]: 'foo'}, {[key]: 'bar'})[key], 'bar');

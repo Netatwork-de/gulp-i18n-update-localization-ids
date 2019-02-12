@@ -10,6 +10,7 @@ const DomRelatedError = require('./lib/dom-related-error');
 const DefaultLocalizationKey = require('./lib/localization-key');
 const IgnoreMap = require('./lib/ignore-map');
 const mergeOptions = require('./lib/merge-options');
+const prefixFilename = require('./lib/prefix-filename');
 const CustomSerializer = require('./lib/custom-serializer');
 
 const CUSTOM_TAG_NAME_REGEXP = /-/;
@@ -34,6 +35,11 @@ module.exports = function (options = {}) {
     const idTemplate = option(options.idTemplate, postfix => `t${postfix}`);
     if (typeof idTemplate !== 'function') {
         throw new TypeError('options.idTemplate must be a function.');
+    }
+
+    const globallyKnownIds = option(options.globallyKnownIds, null);
+    if (globallyKnownIds && !(globallyKnownIds instanceof Map)) {
+        throw new TypeError('options.globallyKnownIds must be a Map instance.');
     }
 
     if (!Array.isArray(options.whitelist)) {
@@ -96,13 +102,20 @@ module.exports = function (options = {}) {
             }
         }
 
+        function isGloballyKnownId(id) {
+            if (globallyKnownIds) {
+                const origin = globallyKnownIds.get(id);
+                return origin && origin !== inFile.path;
+            }
+        }
+
         let nextIdPostfix = 0;
         const assignedPreferredIds = new Set();
         function getOrCreateUniqueId(id) {
-            if (!id || assignedPreferredIds.has(id)) {
+            if (!id || assignedPreferredIds.has(id) || isGloballyKnownId(id)) {
                 let lastGeneratedId;
                 do {
-                    id = idTemplate(nextIdPostfix);
+                    id = idTemplate(nextIdPostfix, inFile);
                     if (typeof id !== 'string' || !LOCALIZATION_ID_REGEXP.test(id)) {
                         throw new PluginError(packageName, `options.idTemplate returned an invalid id: ${id}.`);
                     }
@@ -113,10 +126,13 @@ module.exports = function (options = {}) {
                     lastGeneratedId = id;
 
                     nextIdPostfix++;
-                } while (knownIds.has(id))
+                } while (knownIds.has(id) || isGloballyKnownId(id));
             }
             knownIds.add(id);
             assignedPreferredIds.add(id);
+            if (globallyKnownIds) {
+                globallyKnownIds.set(id, inFile.path);
+            }
             return id;
         }
 
@@ -164,3 +180,4 @@ module.exports = function (options = {}) {
 };
 
 module.exports.mergeOptions = mergeOptions;
+module.exports.prefixFilename = prefixFilename;

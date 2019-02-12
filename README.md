@@ -81,13 +81,14 @@ emit: 'always'
 + `'onChangeOnly'` - Emit only if the file was modified by the plugin. *Choose this value, if you are using this plugin to overwrite files that you are currently working with.*
 
 ### `options.idTemplate = x => 't' + x`
-Optional. A function to generatea new id.
+Optional. A function to generate a new id. It will be automatically ensured that the generated id is unique for the target file.
 ```js
-idTemplate: x => `foo-${x}`
+idTemplate: (x, file) => `foo-${x}`
 
 // Will produce id's like: foo-0, foo-1, ...
 ```
 + x `<number>` - A number that should be included in the id.
++ file `<Vinyl>` - The input file.
 + returns `<string>` - Any string matching `/^[a-z0-9_.-]+$/`.
 
 ### `options.keyAttribute = 't'`

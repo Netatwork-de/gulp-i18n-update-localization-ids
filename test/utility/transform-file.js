@@ -25,7 +25,7 @@ module.exports = (options, input) => new Promise((resolve, reject) => {
             resolve(output);
         }
     });
-    stream.write(new Vinyl({
+    stream.write(input instanceof Vinyl ? input : new Vinyl({
         base: basePath,
         path: virtualFilename,
         contents: Buffer.from(input)
