@@ -91,6 +91,15 @@ idTemplate: (x, file) => `foo-${x}`
 + file `<Vinyl>` - The input file.
 + returns `<string>` - Any string matching `/^[a-z0-9_.-]+$/`.
 
+### `options.globallyKnownIds`
+Optional. A map of (re-)assigned ids to file paths. If specified, it will be ensured, that all ids are unique across all processed files.
+```js
+globallyKnownIds: new Map()
+```
++ It contains pairs like:
+    + `'t0' => '/path/to/file.html'`
+    + `'t1' => '/path/to/other/file.html'`
+
 ### `options.keyAttribute = 't'`
 Optional. Specify the attribute for storing localization keys.
 
@@ -100,6 +109,37 @@ Optional. Specify the encoding to use for de- and encoding files.
 ### `options.LocalizationKey`
 Optional. Specify the class that represents a localization key.<br>
 The class must implement all members of the default one located in `/lib/localization-key.js`.
+
+<br>
+
+
+
+### `prefixFilename(innerTemplate, usedNames)`
+An id template for prefixing ids with the filename (without directories and extension).
+If the same filename exists in different directories, an increasing number is appended.
+```js
+const {prefixFilename} = require('gulp-i18n-update-localization-ids');
+
+i18nUpdateLocalizationIds({
+    whitelist: [...],
+    idTemplate: prefixFilename()
+})
+```
++ innerTemplate `<function>` - Optional. The id template for generating the part after the encoded filename.
++ usedNames `<Map>` - Optional. A map of used encoded names to file paths. This map is used to ensure that no name is used twice for different files.
+    + This option can be used to ensure consistency across plugin instances or executions.
+    + It contains pairs like:
+        + `'foo-bar' => '/path/to/foo-bar.html'`
+        + `'foo-bar1' => '/path/to/other/foo-bar.html'`
+
+| Filename | Generated ID | Inner Template |
+|-|-|-|
+| `foo/bar.html` | `bar-t0` | |
+| `baz/bar.html` | `bar1-t0` | |
+| `FooBar-Baz.Example.html` | `foo-bar-baz-example-t0` | |
+| `foo.html` | `foo-bar-0` | `x => 'bar-' + x` |
+
+*It is recommended to use this template in combination with the `globallyKnownIds` plugin option.*
 
 <br>
 
