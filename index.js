@@ -128,8 +128,8 @@ module.exports = function (options = {}) {
         for (const {node, hasText, whitelisted, originalKey} of candidates) {
             const newKey = new LocalizationKey();
             if (whitelisted.content) {
-                if (hasText) {
-                    const preferredId = originalKey.get('html') || originalKey.get('text');
+                const preferredId = originalKey.get('html') || originalKey.get('text');
+                if (hasText || preferredId) {
                     newKey.set(whitelisted.content, getOrCreateUniqueId(preferredId));
                 }
             } else if (originalKey.has('html') || originalKey.has('text')) {

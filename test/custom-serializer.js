@@ -10,7 +10,7 @@ test('prevent escaping of attribute values', transformTest({
     <div>foo</div>
     <div foo="a & b"></div>
 `, `
-    <div t="[text]t0">foo</div>
+    <div t="t0">foo</div>
     <div foo="a & b"></div>
 `));
 
@@ -19,7 +19,7 @@ test('prevent escaping of text node content', transformTest({
 }, `
     <div>foo & bar</div>
 `, `
-    <div t="[text]t0">foo & bar</div>
+    <div t="t0">foo & bar</div>
 `));
 
 test('prevent adding empty attribute values', transformTest({
@@ -47,7 +47,7 @@ test('preserve original formatting between tag name and attributes', transformTe
 `, `
     <div foo
         bar="baz"></div>
-    <div\n\tbar="foo" t="[text]t0">foo</div>
+    <div\n\tbar="foo" t="t0">foo</div>
 `));
 
 test('require original source', t => {

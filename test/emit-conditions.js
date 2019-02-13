@@ -9,7 +9,7 @@ const basePath = path.resolve(__dirname, './data');
 const virtualFilename = path.resolve(basePath, 'virtual.html');
 
 const CHANGING_CONTENT = '<h1>foo</h1>';
-const FINAL_CONTENT = '<h1 t="[text]bar">foo</h1>';
+const FINAL_CONTENT = '<h1 t="bar">foo</h1>';
 
 function emitCondition(conditionType) {
     return input => new Promise((resolve, reject) => {

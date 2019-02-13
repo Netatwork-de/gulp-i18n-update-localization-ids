@@ -51,14 +51,15 @@ test('format', t => {
     const key = new LocalizationKey([
         ['foo', 'bar'],
         ['bar', 'bar'],
-        ['baz', 'baz']
+        ['baz', 'baz'],
+        ['text', 'yee']
     ]);
-    t.is(key.format(), '[foo,bar]bar;[baz]baz');
+    t.is(key.format(), '[foo,bar]bar;[baz]baz;yee');
 });
 
 test('parse', t => {
     t.is(LocalizationKey.parse('').format(), '');
-    t.is(LocalizationKey.parse('bar').format(), '[text]bar');
+    t.is(LocalizationKey.parse('bar').format(), 'bar');
     t.is(LocalizationKey.parse('[foo]bar').format(), '[foo]bar');
     t.is(LocalizationKey.parse(' [ foo ] bar ').format(), '[foo]bar');
     t.is(LocalizationKey.parse('[foo, baz ] bar ').format(), '[foo,baz]bar');
@@ -71,7 +72,7 @@ test('parse from dom', t => {
     const domUtility = createDomUtility();
 
     t.is(LocalizationKey.fromDom(domUtility, {}, {}).format(), '');
-    t.is(LocalizationKey.fromDom(domUtility, {}, {attrs: [{name: 't', value: 'foo'}]}).format(), '[text]foo');
+    t.is(LocalizationKey.fromDom(domUtility, {}, {attrs: [{name: 't', value: 'foo'}]}).format(), 'foo');
 
     const err = t.throws(() => {
         LocalizationKey.fromDom(domUtility, {path: '/foo'}, {

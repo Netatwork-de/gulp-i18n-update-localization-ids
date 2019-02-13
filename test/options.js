@@ -21,7 +21,7 @@ test('idTemplate', t => transformTest({
     <div>Hello World!</div>
     <div></div>
 `, `
-    <div t="[text]foo-0">Hello World!</div>
+    <div t="foo-0">Hello World!</div>
     <div></div>
 `)(t));
 
@@ -69,7 +69,7 @@ test('keyAttribute', transformTest({
 }, `
     <h1>bar</h1>
 `, `
-    <h1 foo="[text]t0">bar</h1>
+    <h1 foo="t0">bar</h1>
 `));
 
 test('LocalizationKey', transformTest({

@@ -12,7 +12,7 @@ test('content', transformTest({
     <p>foo</p>
 `, `
     <h1>foo</h1>
-    <h1 t="[text]t0">bar</h1>
+    <h1 t="t0">bar</h1>
     <p>foo</p>
 `));
 
@@ -30,5 +30,5 @@ test('tagName', transformTest({
         foo
         <h1>bar</h1>
     </div>
-    <h1 t="[text]t0">foo</h1>
+    <h1 t="t0">foo</h1>
 `));

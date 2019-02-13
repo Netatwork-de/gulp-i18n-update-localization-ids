@@ -17,7 +17,7 @@ test('add new id', transformTest({
     <h1>foo</h1>
     <h1 foo="bar"></h1>
 `, `
-    <h1 t="[text]t0">foo</h1>
+    <h1 t="t0">foo</h1>
     <h1 foo="bar" t="[foo]t1"></h1>
 `));
 
@@ -27,7 +27,7 @@ test('reuse existing id', transformTest({
     <h1 t="bar">foo</h1>
     <h1 foo="bar" t="[foo]baz"></h1>
 `, `
-    <h1 t="[text]bar">foo</h1>
+    <h1 t="bar">foo</h1>
     <h1 foo="bar" t="[foo]baz"></h1>
 `));
 
@@ -38,17 +38,22 @@ test('remove for non-existing attributes', transformTest({
     <h1 t="[foo]abc"></h1>
     <h1 foo="" t="[foo]baz"></h1>
 `, `
-    <h1></h1>
+    <h1 t="foo"></h1>
     <h1></h1>
     <h1 foo="" t="[foo]baz"></h1>
 `));
 
 test('fix content localization type', transformTest({
-    whitelist: [{tagName: 'h1', attrs: ['foo'], content: 'html'}]
+    whitelist: [
+        {tagName: 'h1', content: 'html'},
+        {tagName: 'h2'}
+    ]
 }, `
     <h1 t="[text]bar">foo</h1>
+    <h2 t="[html]foo">bar</h2>
 `, `
     <h1 t="[html]bar">foo</h1>
+    <h2 t="foo">bar</h2>
 `));
 
 test('fix duplicates', transformTest({
@@ -57,7 +62,7 @@ test('fix duplicates', transformTest({
     <h1 t="foo">a</h1>
     <h2 t="[bar]foo" bar="b"></h2>
 `, `
-    <h1 t="[text]foo">a</h1>
+    <h1 t="foo">a</h1>
     <h2 t="[bar]t0" bar="b"></h2>
 `));
 
@@ -66,7 +71,7 @@ test('fix attribute formatting', transformTest({
 }, `
     <h1 t=" [ foo ] bar; test " foo="foo">a</h1>
 `, `
-    <h1 t="[text]test;[foo]bar" foo="foo">a</h1>
+    <h1 t="test;[foo]bar" foo="foo">a</h1>
 `));
 
 test('complex fragment', transformTest({
@@ -78,14 +83,14 @@ test('complex fragment', transformTest({
     <h1>Hello World!</h1>
     <custom-elem t="[html]t0" value="foo">bar</custom-elem>
 </template>`, `<template>
-    <h1 t="[text]t1">Hello World!</h1>
+    <h1 t="t1">Hello World!</h1>
     <custom-elem t="[html]t0;[value]t2" value="foo">bar</custom-elem>
 </template>`));
 
 test('whitelist content defaults', async t => {
     await transformTest({
         whitelist: [{tagName: 'div'}]
-    }, `<div>foo</div>`, `<div t="[text]t0">foo</div>`)(t);
+    }, `<div>foo</div>`, `<div t="t0">foo</div>`)(t);
     await transformFailsTest({
         whitelist: [{tagName: 'custom-elem'}]
     }, `<custom-elem>foo</custom-elem>`, /not.*whitelisted/i)(t);

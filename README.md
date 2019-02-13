@@ -24,7 +24,7 @@ The task is a transform stream that processes each file and emits updated files:
         + ...using existing ids,...
         + ...regererating duplicates ids (per file)...
         + ...or adding missing ids.
-    + When the localized content or attribute is not present or empty, the localization id is removed.
+    + When a localized attribute is not present, the localization id is removed.
 + Throw an error if a non-whitelisted tag is already localized or has text content.
 + Throw an error if a tag contains both text and non-text content.
 
@@ -132,32 +132,10 @@ i18nUpdateLocalizationIds({
 |-|-|
 | `foo/bar.html` | `bar.t0` |
 | `baz/bar.html` | `bar1.t0` |
-| `FooBar-Baz.Example.html` | `foo-bar-baz-example-t0` |
+| `FooBar-Baz.Example.html` | `foo-bar-baz-example.t0` |
 
 **Warning!** There is an edge case where the same prefix could be assigned to different files:<br>
-If you have a file `/b/foo.html` which already has an id `foo.t0` and you create a file `/a/foo.html`, an id `foo.t0` could be used for the new file as the prefixFilename template may not be aware of `/b/foo.html`s prefix at the time, the new file is processed. If you need to avoid this problem in a production build, you could use a linter that detects duplicate prefixes over multiple files or you could populate the global prefix map once before running your actual gulp task like so:
-```js
-const globalPrefixes = new Map()
-
-gulp.series(
-    // This will populate globalPrefixes, but will not write changes to disk:
-    () => gulp.src('./src/**.html')
-        .pipe(i18nUpdateLocalizationIds({
-            whitelist: [...],
-            globalPrefixes
-        }))
-        .resume(),
-
-    // At this time, it will be aware of all prefixes:
-    () => gulp.src('./src/**.html')
-        .pipe(i18nUpdateLocalizationIds({
-            whitelist: [...],
-            globalPrefixes
-        }))
-        // so you can safely write changes to disk:
-        .pipe(gulp.dest('./src'))
-)
-```
+If you have a file `/b/foo.html` which already has an id `foo.t0` and you create a file `/a/foo.html`, an id `foo.t0` could be used for the new file as the prefixFilename template may not be aware of `/b/foo.html`s prefix at the time, the new file is processed. If you need to avoid this problem in a production build, you have to consume all files from the plugin output without writing to disk first and then run your actual task.
 
 <br>
 
@@ -250,7 +228,7 @@ If you run `gulp watch` and save the following file...
 ...it will be transformed into this:
 ```html
 <template>
-    <h1 t="[text]foo-1">Hello World!</h1>
+    <h1 t="foo-1">Hello World!</h1>
 
     <img t="[alt]foo-0" alt="Some image..">
 
