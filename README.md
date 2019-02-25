@@ -132,7 +132,7 @@ i18nUpdateLocalizationIds({
 |-|-|
 | `foo/bar.html` | `bar.t0` |
 | `baz/bar.html` | `bar1.t0` |
-| `FooBar-Baz.Example.html` | `foo-bar-baz-example.t0` |
+| `FooBar-Baz.Example.html` | `FooBar-Baz-example.t0` |
 
 **Warning!** There is an edge case where the same prefix could be assigned to different files:<br>
 If you have a file `/b/foo.html` which already has an id `foo.t0` and you create a file `/a/foo.html`, an id `foo.t0` could be used for the new file as the prefixFilename template may not be aware of `/b/foo.html`s prefix at the time, the new file is processed. If you need to avoid this problem in a production build, you have to consume all files from the plugin output without writing to disk first and then run your actual task. Both plugin instances must share the `globalPrefixes` map.

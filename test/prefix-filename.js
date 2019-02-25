@@ -12,8 +12,8 @@ test('general usage', transformTest({
     <div>foo</div>
     <div>bar</div>
 `), `
-    <div t="foo-bar.t0">foo</div>
-    <div t="foo-bar.t1">bar</div>
+    <div t="FooBar.t0">foo</div>
+    <div t="FooBar.t1">bar</div>
 `));
 
 test('multiple files', async t => {
