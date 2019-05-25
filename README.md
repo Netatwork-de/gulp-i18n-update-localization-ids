@@ -59,7 +59,10 @@ ignore: [
     {content: v => v.startsWith('${') && v.endsWith('}')},
 
     // Ignore <code> tags and all children:
-    {tagName: 'code'}
+    {tagName: 'code'},
+
+    // Ignore attributes that contain aurelia-like interpolation:
+    {attr: v => /\$\{[^\}]+\}/}
 ]
 ```
 + ignore `<IgnoreItem>` - This can be any of the following:
@@ -67,6 +70,7 @@ ignore: [
     + `<object>` - An object with the following properties:
         + content `<Rule>` - Ignore tag text content if it matches the rule.
         + tagName `<Rule>` - Ignore a tag and it's subtree if it matches the rule.
+        + attr `<Rule>` - Ignore attributes if the value matches the rule.
 + `<Rule>` can be one of the following:
     + `<string>` - If the value matches the specified one.
     + `<function>` - If the function returns true for the value.

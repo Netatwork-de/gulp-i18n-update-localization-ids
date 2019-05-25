@@ -32,3 +32,23 @@ test('tagName', transformTest({
     </div>
     <h1 t="t0">foo</h1>
 `));
+
+test('attr (add ids)', transformTest({
+    whitelist: [{tagName: 'div', attrs: ['foo']}],
+    ignore: {attr: 'baz'}
+}, `
+    <div foo="bar"></div>
+    <div foo="baz"></div>
+`, `
+    <div foo="bar" t="[foo]t0"></div>
+    <div foo="baz"></div>
+`));
+
+test('attr (remove ids)', transformTest({
+    whitelist: [{tagName: 'div', attrs: ['foo']}],
+    ignore: {attr: 'baz'}
+}, `
+    <div foo="baz" t="[foo]t0"></div>
+`, `
+    <div foo="baz"></div>
+`));
