@@ -19,10 +19,10 @@
     "report-coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {
-    "ava": "^1.1.0",
-    "coveralls": "^3.0.2",
+    "ava": "^1.4.1",
+    "coveralls": "^3.0.3",
     "gulp": "^4.0.0",
-    "nyc": "^13.1.0"
+    "nyc": "^14.1.1"
   },
   "peerDependencies": {
     "gulp": "^4.0.0",
