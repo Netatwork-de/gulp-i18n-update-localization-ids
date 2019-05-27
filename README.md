@@ -70,7 +70,7 @@ ignore: [
     + `<object>` - An object with the following properties:
         + content `<Rule>` - Ignore tag text content if it matches the rule.
         + tagName `<Rule>` - Ignore a tag and it's subtree if it matches the rule.
-        + attr `<Rule>` - Ignore attributes if the value matches the rule.
+        + attr `<Rule>` - Ignore attributes if the value matches the rule. No `t` attributes will created for ignored attributes and they will not be modified or removed.
 + `<Rule>` can be one of the following:
     + `<string>` - If the value matches the specified one.
     + `<function>` - If the function returns true for the value.
