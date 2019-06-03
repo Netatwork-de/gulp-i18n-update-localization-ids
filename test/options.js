@@ -72,6 +72,10 @@ test('keyAttribute', transformTest({
     <h1 foo="t0">bar</h1>
 `));
 
+test('exceptions validation', t => {
+	t.throws(() => createPlugin({exceptions: {foo: 'bar'}}));
+});
+
 test('LocalizationKey', transformTest({
     whitelist: [{tagName: 'div'}],
     LocalizationKey: class CustomKey extends LocalizationKey {

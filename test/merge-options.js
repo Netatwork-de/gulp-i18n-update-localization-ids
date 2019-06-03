@@ -28,6 +28,20 @@ test('ignore', t => {
     );
 });
 
+test('exceptions', t => {
+	t.deepEqual(mergeOptions({}, {}).exceptions, undefined);
+	t.deepEqual(mergeOptions({exceptions: {foo: 'bar'}}, {}).exceptions, {foo: 'bar'});
+	t.deepEqual(mergeOptions({}, {exceptions: {foo: 'bar'}}).exceptions, {foo: 'bar'});
+	t.deepEqual(
+		mergeOptions({exceptions: {foo: 'bar'}}, {exceptions: {bar: 'baz'}}).exceptions,
+		{foo: 'bar', bar: 'baz'}
+	);
+	t.deepEqual(
+		mergeOptions({exceptions: {foo: 'bar'}}, {exceptions: {foo: 'baz'}}).exceptions,
+		{foo: 'baz'}
+	);
+});
+
 test('atomic options', t => {
     for (const key of ['emit', 'idTemplate', 'keyAttribute', 'encoding', 'LocalizationKey']) {
         t.is(mergeOptions({[key]: 'foo'}, {})[key], 'foo');

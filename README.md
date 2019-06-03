@@ -111,6 +111,22 @@ Optional. Specify the attribute for storing localization keys.
 ### `options.encoding = 'utf8'`
 Optional. Specify the encoding to use for de- and encoding files.
 
+### `options.exceptions = { }`
+Optional. Configure, how specific exceptions are handled.<br>
+Currently, the following exceptions can be configured:
+```js
+exceptions: {
+	// If a tag contains text content, and the tag or it's content is not whitelisted.
+	// (Consider using an ignore rule instead)
+	illegalContent: 'throw'
+
+	// If a tag has a `t` attribute, and the tag or a localized attribute is not whitelisted.
+	// (Consider whitelisting the attribute instead)
+	illegalAttribute: 'throw'
+}
+```
+The following behaviour types are available: `'throw'`, `'warn'` and `'ignore'`.
+
 ### `options.LocalizationKey`
 Optional. Specify the class that represents a localization key.<br>
 The class must implement all members of the default one located in `/lib/localization-key.js`.

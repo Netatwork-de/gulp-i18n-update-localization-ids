@@ -23,12 +23,19 @@ function option(value, defaultValue) {
 module.exports = function (options = {}) {
     // Normalize plugin options:
     const encoding = option(options.encoding, 'utf8');
-    const keyAttribute = option(options.keyAttribute, 't');
+	const keyAttribute = option(options.keyAttribute, 't');
 
     const emitCondition = option(options.emit, 'always');
     if (!['always', 'onChangeOnly'].includes(emitCondition)) {
         throw new TypeError('options.emit must be "always" or "onChangeOnly".');
-    }
+	}
+
+	const exceptions = option(options.exceptions, {});
+	for (const name in exceptions) {
+		if (!['throw', 'warn', 'ignore'].includes(exceptions[name])) {
+			throw new TypeError(`options.exceptions.${name} must be "throw", "warn" or "ignore".`);
+		}
+	}
 
     const LocalizationKey = option(options.LocalizationKey, DefaultLocalizationKey);
 
@@ -91,9 +98,9 @@ module.exports = function (options = {}) {
                 }
                 candidates.push({node, hasText, whitelisted, originalKey});
             } else if (hasText) {
-                throw new DomRelatedError(inFile, node, 'Non-whitelisted tag has text content.');
+                new DomRelatedError(inFile, node, 'Non-whitelisted tag has text content.').emit(exceptions.illegalContent);
             } else if (getAttr(node, keyAttribute)) {
-                throw new DomRelatedError(inFile, node, `Non-whitelisted tag has a ${keyAttribute} attribute.`);
+                new DomRelatedError(inFile, node, `Non-whitelisted tag has a ${keyAttribute} attribute.`).emit(exceptions.illegalAttribute);
             }
         }
 
@@ -133,9 +140,15 @@ module.exports = function (options = {}) {
                     newKey.set(whitelisted.content, getOrCreateUniqueId(preferredId));
                 }
             } else if (originalKey.has('html') || originalKey.has('text')) {
-                throw new DomRelatedError(inFile, node, 'Content is already localized, but not whitelisted.');
+				new DomRelatedError(inFile, node, 'Content is already localized, but not whitelisted.').emit(exceptions.illegalContent);
+				if (originalKey.has('html')) {
+					newKey.set('html', originalKey.get('html'));
+				}
+				if (originalKey.has('text')) {
+					newKey.set('text', originalKey.get('text'));
+				}
             } else if (hasText) {
-                throw new DomRelatedError(inFile, node, 'Content is not whitelisted to be localized.');
+                new DomRelatedError(inFile, node, 'Content is not whitelisted to be localized.').emit(exceptions.illegalContent);
             }
             for (const attr of whitelisted.attrs) {
                 if (typeof getAttr(node, attr) === 'string') {
@@ -145,7 +158,7 @@ module.exports = function (options = {}) {
             }
             for (const [attr] of originalKey) {
                 if (attr !== 'text' && attr !== 'html' && !whitelisted.attrs.has(attr)) {
-                    throw new DomRelatedError(inFile, node, `Attribute "${attr}" is already localized, but not whitelisted.`);
+                    new DomRelatedError(inFile, node, `Attribute "${attr}" is already localized, but not whitelisted.`).emit(exceptions.illegalAttribute);
                 }
             }
 
